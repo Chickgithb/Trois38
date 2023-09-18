@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('title')
-    الفروع
+    الإدارات
 @endsection
 @section('titleheader')
-    السنوات المالية
+إدارات الموظفين
 @endsection
 @section('titleheader1')
-    <a href="{{ route('branches.index') }}">
-        الفروع</a>
+    <a href="{{ route('departements.index') }}">
+        الإدارات</a>
 @endsection
 @section('titleheader2')
     عرض
@@ -98,109 +98,82 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header" style="text-align: center;">
-                <h3 class="card-title"></h3> بيانات الفروع </h3>
-                <a href="{{ route('branches.create') }}" class="btn btn-sm btn-warning"
+                <h3 class="card-title"></h3> إدارات الشركة </h3>
+                <a href="{{ route('departements.create') }}" class="btn btn-sm btn-warning"
                     style="color: rgb(0, 0, 0);background-color:rgb(236, 255, 33);font-weight:bold;">
                     <img src="{{ asset('assets/admin/dist/img/5501851.png') }}" alt="" style="width: 24px;"> اضافة
                     جديد
                 </a>
             </div>
-            <div class="card-body" style="text-align:center">
 
-                @if (@isset($data) and !@empty($data))
+            <div class="card-body" style="text-align: center" id="ajax_responce_serachDiv">
+                @if (@isset($data) and !@empty($data) and count($data) > 0)
                     <table id="example2" class="table table-bordered table-hover">
                         <thead class="custom_thead">
-                            <tr>
-                                <th>كود الفرع</th>
-                                <th> الاسم</th>
-                                <th> العنوان</th>
-                                <th>الهاتف</th>
-                                <th>البريد</th>
-                                <th>حالة التفعيل</th>
-                                <th>الاضافة بواسطة</th>
-                                <th>التحديث بواسطة</th>
-                                <th style="width: 100px">العمليات</th>
-                            </tr>
+                            <th>إسم الإدارة</th>
+                            <th>الهاتف</th>
+                            <th>الملاحظات</th>
+                            <th> حالة التفعيل</th>
+                            <th> الاضافة بواسطة</th>
+                            <th style="width: 100px">العمليات</th>
                         </thead>
-
                         <tbody>
                             @foreach ($data as $info)
                                 <tr>
-                                    <td> {{ $info->id }} </td>
-                                    <td> {{ $info->name }} </td>
-                                    <td> {{ $info->address }} </td>
-                                    <td> {{ $info->phones }} </td>
-                                    <td> {{ $info->email }} </td>
-                                    <td
-                                        @if ($info->active == 1) style="background-color:green"
-                                    @else
-                                    class="bg-danger" @endif>
+                                    <td>{{ $info->name }}</td>
+                                    <td>{{ $info->phones }}</td>
+                                    <td>{{ $info->notes }}</td>
+
+                                    <td @if ($info->active == 1) class="bg-success" @else class="bg-danger" @endif>
                                         @if ($info->active == 1)
                                             مفعل
                                         @else
-                                            غير مفعل
+                                            معطل
                                         @endif
-
-                                    </td>
-                                    <td><span class="count">{{ $info->added->name }} </span></td>
-                                    <td>
-                                        @if ($info->updated_by > 0)
-                                            {{ $info->updatedby->name }}
-                                        @else
-                                            لايوجد
-                                        @endif
-                                        </span>
                                     </td>
                                     <td>
+                                        @php
+                                            $dt = new DateTime($info->created_at);
+                                            $date = $dt->format('Y-m-d');
+                                            $time = $dt->format('h:i');
+                                            $newDateTime = date('A', strtotime($time));
+                                            $newDateTimeType = $newDateTime == 'AM' ? 'صباحا ' : 'مساء';
+                                        @endphp
+                                        {{ $date }}-
+                                        {{ $time }}
+                                        {{ $newDateTimeType }} <br>
+                                        <span class="count">{{ $info->added->name }}</span>
+                                    </td>
 
-                                        <a href="{{ route('branches.edit', $info->id) }}" class="fas fa-edit"
-                                            style="color: rgb(0, 255, 81);margin-left:4px; background-color:white;width:22%">
+                                    <td style="text-align: center">
+
+                                        <a href="{{ route('departements.edit', $info->id) }}" class="fas fa-edit"
+                                            style="color: rgb(0, 255, 81);margin-left:4px; background-color:white;width:27%">
                                         </a>
-                                        <a href="{{ route('branches.delete', $info->id) }}"
+                                        <a href="{{ route('departements.destroy', $info->id) }}"
                                             class="fas are_you_shur fa-trash-alt" id="are_you_shur"
-                                            style="color: rgb(181, 0, 0);margin-right:4px; background-color:white;width:22%">
+                                            style="color: rgb(181, 0, 0);margin-right:4px; background-color:white;width:27%">
                                         </a>
-
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <br>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            {{ $data->links('pagination::bootstrap-5') }}
+
+                        </ul>
+                      </nav>
+
                 @else
                     <p class="bg-danger text-center"> عفوا لاتوجد بيانات لعرضها</p>
                 @endif
-
             </div>
         </div>
     </div>
 
-
 @endsection
-@section('scripts')
-    <script>
-        $(document).ready(function() {
-            $(document).on('click', '.show_year_monthes', function() {
-                var id = $(this).data('id');
-                jQuery.ajax({
-                    url: '{{ route('finance_calenders.show_year_monthes') }}',
-                    type: 'post',
-                    'dataType': 'html',
-                    cache: false,
-                    data: {
-                        "_token": '{{ csrf_token() }}',
-                        'id': id
-                    },
-                    success: function(data) {
-                        $("#show_year_monthesModalBody").html(data);
-                        $("#show_year_monthesModal").modal("show");
 
-                    },
-                    error: function() {
-
-
-                    },
-                });
-            });
-        })
-    </script>
-@endsection

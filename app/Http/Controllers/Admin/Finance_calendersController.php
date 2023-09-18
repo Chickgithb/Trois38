@@ -25,7 +25,7 @@ class Finance_calendersController extends Controller
      */
     public function index()
     {
-        $data=Finance_calenders::select("*")->orderby('FINANCE_YR','DESC')->paginate(PAGEINATION_COUNTER);
+        $data=Finance_calenders::select("*")->orderby('FINANCE_YR','DESC')->paginate(PC);
         $CheckDataOpenCounter = Finance_calenders::where(['is_open' => 1])->count();
         return view('admin.Finance_calender.index',['data'=>$data,'CheckDataOpenCounter'=>$CheckDataOpenCounter]);
         }

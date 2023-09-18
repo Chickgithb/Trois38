@@ -59,6 +59,8 @@ class BranchesController extends Controller
     }
     return view('admin.Branches.edit', ['data' => $data]);
     }
+
+    
     public function update($id,Branches_Request $requst)
     {
     try{

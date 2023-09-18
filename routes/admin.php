@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\BranchesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Finance_calendersController;
 use App\Http\Controllers\Admin\Admin_panel_settingController;
+use App\Http\Controllers\Admin\DepartementController;
+use App\Http\Controllers\Admin\ShitsTypesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +47,27 @@ Route::group(['prefix'=>'admin', 'middleware'=>'auth:admin'], function(){
     Route::get('/branchesEdit{id}',[BranchesController::class,'edit'])->name('branches.edit');
     Route::post('/branchesUpdate/{id}',[BranchesController::class,'update'])->name('branches.update');
     Route::get('/branchesDelete/{id}',[BranchesController::class,'destroy'])->name('branches.delete');
+
+
+
+                          // الشفتات
+    Route::get('/ShitsTypes',[ShitsTypesController::class,'index'])->name('ShitsTypes.index');
+    Route::get('/ShitsTypesCreate',[ShitsTypesController::class,'create'])->name('ShitsTypes.create');
+    Route::post('/ShitsTypesStore',[ShitsTypesController::class,'store'])->name('ShitsTypes.store');
+    Route::get('/ShitsTypesEdit/{id}',[ShitsTypesController::class,'edit'])->name('ShitsTypes.edit');
+    Route::post('/ShitsTypesUpdate/{id}',[ShitsTypesController::class,'update'])->name('ShitsTypes.update');
+    Route::get('/ShitsTypesDelete/{id}',[ShitsTypesController::class,'destroy'])->name('ShitsTypes.destroy');
+    Route::post("/ShiftsTypesajax_search/",[ShiftsTypesController::class,'ajax_search'])->name('ShiftsTypes.ajax_search');
+
+
+   // الادارات
+
+    Route::get('/departements',[DepartementController::class,'index'])->name('departements.index');
+    Route::get('/departementsCreate',[DepartementController::class,'create'])->name('departements.create');
+    Route::post('/departementsStore',[DepartementController::class,'store'])->name('departements.store');
+    Route::get('/departementsEdit/{id}',[DepartementController::class,'edit'])->name('departements.edit');
+    Route::post('/departementsUpdate/{id}',[DepartementController::class,'update'])->name('departements.update');
+    Route::get('/departementsDelete/{id}',[DepartementController::class,'destroy'])->name('departements.destroy');
 
 });
 

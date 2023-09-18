@@ -10,6 +10,9 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="" class="nav-link">Contact</a>
       </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{ route('admin.dashboard') }}" class="nav-link">الرئيسية</a>
+      </li>
     </ul>
 
     <!-- SEARCH FORM -->
@@ -36,7 +39,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img src="{{ asset('assets/admin/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
